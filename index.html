@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07101b"><title>STARK 4WD · BLE Remote</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#07101b;color:#e9f5ff}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% 0%,#183046 0%,#07101b 58%);user-select:none;-webkit-user-select:none}
+main{max-width:490px;margin:auto;padding:27px 20px 42px}.eyebrow{letter-spacing:.2em;font-size:11px;color:#64d7e8;font-weight:800}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:29px}.brand{font-size:23px;font-weight:900;letter-spacing:.05em}.brand span{color:#60e9dd}.chip{border:1px solid #315268;border-radius:30px;padding:8px 11px;color:#9db5c6;font-size:11px;font-weight:800}.chip.on{color:#73eeb4;border-color:#267957}.panel{background:#101e2c;border:1px solid #284258;border-radius:23px;padding:20px;box-shadow:0 12px 35px #0004}.status{display:flex;align-items:center;gap:11px;margin:0 0 17px}.dot{height:11px;width:11px;border-radius:50%;background:#8a97a6;box-shadow:0 0 0 6px #8a97a617}.dot.on{background:#64efb7;box-shadow:0 0 0 6px #64efb71a}.status strong{display:block;font-size:15px}.status small{display:block;color:#94a9bb;margin-top:3px}.connect{width:100%;padding:15px;border:0;border-radius:13px;color:#07121e;font-weight:900;background:linear-gradient(90deg,#60e1dd,#6dc7fa);font-size:14px;cursor:pointer}.connect:disabled{opacity:.5}.hint{font-size:12px;color:#94abbe;line-height:1.6;margin:12px 0 0}.heading{display:flex;align-items:center;justify-content:space-between;margin:29px 3px 14px}.heading h2{font-size:14px;letter-spacing:.13em;margin:0;color:#c3d9eb}.heading small{color:#7793a8}.controller{border:1px solid #284258;background:linear-gradient(145deg,#122436,#0c1928);border-radius:29px;padding:26px 14px 20px;touch-action:none;overscroll-behavior:contain}.dpad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;max-width:345px;margin:auto}.move{height:94px;border:1px solid #34526a;border-radius:20px;background:linear-gradient(145deg,#1e384d,#102335);color:#aee4f4;display:flex;justify-content:center;align-items:center;flex-direction:column;gap:6px;font-weight:800;touch-action:none;cursor:pointer;transition:transform .06s,border .06s,background .06s}.move svg{width:28px;height:28px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}.move span{font-size:11px;letter-spacing:.04em}.move:active,.move.active{background:linear-gradient(145deg,#126d78,#144057);border-color:#65e8e2;transform:scale(.96);color:white;box-shadow:0 0 24px #3cdcca25}.move:disabled{opacity:.34;cursor:not-allowed}.blank{visibility:hidden}.stop{border:1px solid #cf5864;background:linear-gradient(140deg,#712637,#4b1d2d);color:#ffe6e9}.stop:active{background:#af3349}.foot{margin-top:19px;text-align:center;font-size:12px;color:#8aa4b6;min-height:18px}.foot em{font-style:normal;color:#69e4d9;font-weight:800}.alert{margin-top:17px;background:#442b1f;border:1px solid #80502f;color:#ffcc98;padding:12px 14px;border-radius:13px;font-size:12px;line-height:1.5}.note{font-size:12px;color:#7894a8;line-height:1.6;margin:22px 4px}.keyboard{font-size:11px;color:#82a4b6;margin-top:15px;text-align:center}.disable{opacity:.5}@media(max-width:370px){.move{height:79px;border-radius:15px}.dpad{gap:8px}}
+</style></head>
+<body><main>
+<div class="top"><div><div class="eyebrow">BLUETOOTH DRIVE SYSTEM</div><div class="brand">STARK <span>4WD</span></div></div><div class="chip" id="chip">OFFLINE</div></div>
+<section class="panel"><div class="status"><div class="dot" id="dot"></div><div><strong id="connectionTitle">Robot disconnected</strong><small id="connectionSubtitle">ESP32 BLE · STARK-4WD</small></div></div><button id="connect" class="connect">CONNECT BLUETOOTH</button><p class="hint" id="support">Turn on Bluetooth, then tap Connect and choose STARK-4WD.</p></section>
+<div class="heading"><h2>DRIVE CONTROLS</h2><small>HOLD TO MOVE</small></div>
+<section class="controller"><div class="dpad">
+<div class="blank"></div><button class="move" data-drive="F" disabled aria-label="Forward"><svg viewBox="0 0 24 24"><path d="M12 20V4m-7 7 7-7 7 7"/></svg><span>FORWARD</span></button><div class="blank"></div>
+<button class="move" data-drive="L" disabled aria-label="Pivot left"><svg viewBox="0 0 24 24"><path d="M20 12H4m7-7-7 7 7 7"/></svg><span>LEFT</span></button>
+<button class="move stop" data-drive="S" disabled aria-label="Stop"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></svg><span>STOP</span></button>
+<button class="move" data-drive="R" disabled aria-label="Pivot right"><svg viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></svg><span>RIGHT</span></button>
+<div class="blank"></div><button class="move" data-drive="B" disabled aria-label="Backward"><svg viewBox="0 0 24 24"><path d="M12 4v16m-7-7 7 7 7-7"/></svg><span>BACKWARD</span></button><div class="blank"></div>
+</div><div class="foot" id="driveStatus">Connect to enable controls</div><div class="keyboard">Desktop: arrow keys to drive · space to stop</div></section>
+<div class="alert">⚠ Lift the wheels off the ground for your first test. Power motors from a properly rated separate battery supply—not the ESP32 USB port. Share a common ground.</div>
+<p class="note">This is a BLE web remote. It needs Android Chrome and an HTTPS-hosted page (or localhost for desktop testing). On disconnect or missed commands, firmware stops the motors automatically.</p>
+</main>
+<script>
+'use strict';
+const SERVICE = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+const RX = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+const $ = id => document.getElementById(id);
+const buttons = [...document.querySelectorAll('[data-drive]')];
+const encoder = new TextEncoder();
+let device = null, rx = null, connected = false, held = 'S', sending = false;
+let sendAgain = false, keysDown = new Set();
+function setUI(on, msg) {
+  connected = on;
+  $('chip').textContent=on?'CONNECTED':'OFFLINE';
+  $('chip').classList.toggle('on',on);$('dot').classList.toggle('on',on);
+  $('connectionTitle').textContent=on?'Robot connected':'Robot disconnected';
+  $('connectionSubtitle').textContent=on?'Ready · press and hold to drive':'ESP32 BLE · STARK-4WD';
+  $('connect').textContent=on?'DISCONNECT':'CONNECT BLUETOOTH';
+  buttons.forEach(b=>b.disabled=!on);
+  $('driveStatus').textContent=msg||(on?'Ready to drive':'Connect to enable controls');
+  if (!on) buttons.forEach(b=>b.classList.remove('active'));
+}
+function updateActive(){buttons.forEach(b=>b.classList.toggle('active',connected && held!=='S' && b.dataset.drive===held));}
+function requestSend(){
+  if (!connected || !rx) return;
+  if(sending){sendAgain=true;return;}
+  sending=true;
+  (async()=>{
+    try {
+      do {
+        sendAgain=false;
+        const cmd=held;
+        // use write-with-response where supported, avoiding overlapped GATT writes
+        const data=encoder.encode(cmd);
+        if(typeof rx.writeValueWithResponse==='function') await rx.writeValueWithResponse(data);
+        else await rx.writeValue(data);
+      } while(sendAgain && connected && rx);
+    } catch(e) {
+      console.error(e);
+      releaseDrive();
+      $('driveStatus').textContent='Bluetooth command failed — verify connection';
+    } finally {sending=false;}
+  })();
+}
+function setDrive(cmd){
+  if(!connected)return;
+  held=cmd;updateActive();
+  $('driveStatus').textContent=cmd==='S'?'STOPPED':({F:'FORWARD',B:'REVERSE',L:'PIVOT LEFT',R:'PIVOT RIGHT'})[cmd];
+  requestSend();
+}
+function releaseDrive(){ if(held!=='S'){held='S';updateActive();requestSend();if(connected)$('driveStatus').textContent='STOPPED';} }
+function lostConnection(){held='S';rx=null;keysDown.clear();setUI(false,'Disconnected · motors will stop');}
+async function connect(){
+  if(connected){releaseDrive();const d=device;lostConnection();if(d?.gatt?.connected)d.gatt.disconnect();return;}
+  if(!navigator.bluetooth){$('support').textContent='Web Bluetooth unavailable. Use Android Chrome with an HTTPS URL (iPhone Safari is unsupported).';return;}
+  $('connect').disabled=true;
+  try {
+    device=await navigator.bluetooth.requestDevice({filters:[{name:'STARK-4WD'}],optionalServices:[SERVICE]});
+    device.addEventListener('gattserverdisconnected',lostConnection);
+    const server=await device.gatt.connect();
+    const service=await server.getPrimaryService(SERVICE);
+    rx=await service.getCharacteristic(RX);
+    held='S';setUI(true,'Ready to drive');requestSend();
+  } catch(e){console.warn(e);lostConnection();$('driveStatus').textContent=e.name==='NotFoundError'?'No device selected':`Connection error: ${e.message}`;}
+  finally{$('connect').disabled=false;}
+}
+$('connect').addEventListener('click',connect);
+const heldPointers=new Map();
+for(const b of buttons){
+  const cmd=b.dataset.drive;
+  if(cmd==='S'){
+    b.addEventListener('pointerdown',e=>{e.preventDefault();heldPointers.clear();setDrive('S');});
+    continue;
+  }
+  b.addEventListener('pointerdown',e=>{if(!connected)return;e.preventDefault();heldPointers.set(e.pointerId,cmd);b.setPointerCapture(e.pointerId);setDrive(cmd);});
+  const end=e=>{if(heldPointers.delete(e.pointerId))releaseDrive();};
+  b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end);
+  b.addEventListener('lostpointercapture',end);
+}
+window.addEventListener('blur',()=>{heldPointers.clear();keysDown.clear();releaseDrive();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){heldPointers.clear();keysDown.clear();releaseDrive();}});
+const keyMap={ArrowUp:'F',ArrowDown:'B',ArrowLeft:'L',ArrowRight:'R',' ':'S'};
+document.addEventListener('keydown',e=>{if(!(e.key in keyMap)||!connected)return;e.preventDefault();if(e.repeat)return;keysDown.add(e.key);setDrive(keyMap[e.key]);});
+document.addEventListener('keyup',e=>{if(!(e.key in keyMap))return;e.preventDefault();keysDown.delete(e.key);releaseDrive();});
+// Refresh held directions every 170 ms. ESP32 times out after 650 ms.
+setInterval(()=>{if(connected && held!=='S')requestSend();},170);
+if(!navigator.bluetooth)$('support').textContent='This browser cannot use Web Bluetooth. Android Chrome + HTTPS is recommended.';
+else if(!window.isSecureContext)$('support').textContent='Web Bluetooth requires HTTPS (or localhost on desktop). Host this file on an HTTPS site.';
+</script></body></html>
